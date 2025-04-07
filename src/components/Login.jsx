@@ -1,13 +1,39 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Replace with your authentication logic
-    console.log('Email:', email, 'Password:', password);
+
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        // Optionally handle error (e.g., display a message)
+        console.error('Login failed');
+        return;
+      }
+
+      const data = await response.json();
+      // Save the access token (this example uses localStorage)
+      localStorage.setItem('access_token', data.access_token);
+
+      // Redirect to /dashboard
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error during login:', error);
+      // Optionally display an error message to the user
+    }
   };
 
   return (
@@ -16,10 +42,7 @@ function AdminLogin() {
         <h2 className="text-2xl font-bold text-center mb-6">Admin Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
+            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
               Email
             </label>
             <input
@@ -33,10 +56,7 @@ function AdminLogin() {
             />
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
+            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
               Password
             </label>
             <input
