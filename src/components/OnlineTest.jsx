@@ -2082,7 +2082,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaClock, FaArrowLeft, FaArrowRight, FaCheckCircle } from "react-icons/fa";
-import logo from "../assets/ThinkTech-Logo.png"; // Update the path as needed
+import logo from "../assets/logonew.png"; // Update the path as needed
 
 export default function OnlineTest() {
   /*********************
@@ -2109,6 +2109,9 @@ export default function OnlineTest() {
     "Do not refresh the page while taking the test.",
     "You can move back and forth between questions using the Previous/Next buttons.",
     "The test will auto-submit when the time is up.",
+    "Leaving full screen or changing tabs after the test begins will result in automatic submission of the test.",
+    "Please ensure a stable internet connection throughout the test.",
+    "In case of any dispute, the decision of Thinktech will be final."
   ];
 
   /*********************
@@ -2285,19 +2288,19 @@ export default function OnlineTest() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 font-[Inter]">
       {/* Header / Logo */}
-      <header className="flex items-center p-4 bg-[#004aad]">
+      <header className="flex items-center justify-between p-4 bg-[#e0e5ec]">
         <img src={logo} alt="ThinkTech Logo" className="h-10 w-auto mr-4" />
-        <h1 className="text-white text-xl font-bold">
-          Digital Transformation Specialists
+        <h1 className="text-[#070e21] text-xl font-bold tracking-wide">
+          Thinktech Online Testing Platform
         </h1>
       </header>
 
       <main className="flex-grow container mx-auto p-4">
         {/* Step 1: Registration & Instructions */}
         {step === 1 && (
-          <div className="max-w-xl mx-auto bg-white shadow-md rounded p-6">
+          <div className="max-w-4xl mx-auto bg-white shadow-md rounded p-6">
             <h2 className="text-2xl font-bold mb-4 text-[#000000]">
               Test Instructions
             </h2>
@@ -2351,7 +2354,13 @@ export default function OnlineTest() {
                   id="phone"
                   type="tel"
                   className="mt-1 p-2 border rounded w-full"
-                  {...register("phone", { required: "Phone number is required" })}
+                  {...register("phone", {
+                    required: "Phone number is required",
+                    pattern: {
+                      value: /^\d{10}$/,
+                      message: "Phone number must be exactly 10 digits",
+                    },
+                  })}
                 />
                 {errors.phone && (
                   <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
@@ -2375,12 +2384,14 @@ export default function OnlineTest() {
                   {errors.hasReadInstructions.message}
                 </p>
               )}
+              <div className="w-full flex justify-center">
               <button
                 type="submit"
-                className="px-4 py-2 rounded text-white bg-[#004aad] hover:bg-blue-700 transition-colors"
+                className="px-11 py-3 rounded text-white bg-[#004aad] hover:bg-blue-700 transition-colors cursor-pointer"
               >
                 Proceed
               </button>
+              </div>
             </form>
           </div>
         )}
